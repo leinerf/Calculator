@@ -74,6 +74,7 @@ class ViewController: UIViewController {
                     operationsInputted.append(operationChosen)
                 }
                 outputValue.text = "0"
+                hasDecimal = false
                 operationChosen = -1
             }
             appendNumber(tag: sender.tag)
@@ -116,7 +117,11 @@ class ViewController: UIViewController {
             print(currentNum)
             counter += 1
         }
-        outputValue.text = String(currentNum)
+        if floor(currentNum) == currentNum {
+                outputValue.text = String(Int(currentNum))
+        } else {
+            outputValue.text = String(currentNum)
+        }
     }
     
     func appendNumber(tag: Int) {
@@ -139,8 +144,5 @@ class ViewController: UIViewController {
         else {
             outputValue.text = "\(currentNumber)\(appendNumber)"
         }
-    }
-    func executeMathCaclulation(){
-        
     }
 }
