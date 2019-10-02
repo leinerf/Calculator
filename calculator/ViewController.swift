@@ -34,24 +34,40 @@ class ViewController: UIViewController {
     @IBAction func OnPressCalc(_ sender: UIButton) {
         //reset if necessary
         if isAnOperation(tag: sender.tag){
+            print(numbersInputted)
+            print(operationsInputted)
             operationChosen = sender.tag
             //execute previous stuff
             if numbersInputted.count > 0 && operationsInputted.count > 0 {
-                print(numbersInputted)
-                print(operationsInputted)
-                if ![203, 303].contains(operationsInputted.last) || ![003, 103].contains(operationChosen)
-                {
-                    print("it went here with \(operationsInputted.last)")
-                    executeCalculation()
+                
+                if operationChosen == 402 {
+                    executeCalculation(stop: numbersInputted.count)
+                }
+                else {
+                    executeCalculation(stop: 1)
                 }
             }
             
-        } else {
+            
+        }
+        else if sender.tag == 000 {
+            numbersInputted.removeAll()
+            operationsInputted.removeAll()
+            outputValue.text = "0"
+        }
+        else if sender.tag == 001 {
+            var saveNum = Double(outputValue.text ?? "0")!
+            saveNum = -1 * saveNum
+            outputValue.text = String(saveNum)
+        }
+        
+        else {
             if operationChosen != -1{
                 //save previous num
                 let saveNum = Double(outputValue.text ?? "0")!
-                numbersInputted.append(saveNum)
-                if sender.tag != 403 {
+                
+                if operationChosen != 402 {
+                    numbersInputted.append(saveNum)
                     operationsInputted.append(operationChosen)
                 }
                 outputValue.text = "0"
@@ -63,7 +79,7 @@ class ViewController: UIViewController {
     }
     
     func isAnOperation(tag: Int) -> Bool{
-        return [003, 103, 203, 303, 403].contains(tag)
+        return [003, 103, 203, 303, 402].contains(tag)
     }
     
     func performOperation(left: Double, right: Double, operation: Int) -> Double {
@@ -86,11 +102,18 @@ class ViewController: UIViewController {
         }
     }
     
-    func executeCalculation(){
-        let currentNum = Double(outputValue.text!)!
-        let prevNum = numbersInputted.removeLast()
-        let prevOperation = operationsInputted.removeLast()
-        outputValue.text = String(performOperation(left: prevNum, right: currentNum, operation: prevOperation))
+    func executeCalculation(stop: Int){
+        var counter = 0
+        var currentNum = Double(outputValue.text!)!
+        
+        while counter < stop {
+            let prevNum = numbersInputted.removeLast()
+            let prevOperation = operationsInputted.removeLast()
+            currentNum = performOperation(left: prevNum, right: currentNum, operation: prevOperation)
+            print(currentNum)
+            counter += 1
+        }
+        outputValue.text = String(currentNum)
     }
     
     func appendNumber(tag: Int) {
