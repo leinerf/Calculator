@@ -43,7 +43,10 @@ class ViewController: UIViewController {
                 if operationChosen == 402 {
                     executeCalculation(stop: numbersInputted.count)
                 }
-                else {
+                else if numbersInputted.count == 2 && operationsInputted.count == 2 && [203, 303].contains(operationChosen){
+                    executeCalculation(stop: 2)
+                }
+                else if ![203, 303].contains(operationsInputted.last) || ![003, 103].contains(operationChosen){
                     executeCalculation(stop: 1)
                 }
             }
